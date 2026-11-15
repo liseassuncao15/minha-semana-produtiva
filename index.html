@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fdf8ed">
+<title>Minha Semana Produtiva</title>
+<link rel="icon" type="image/png" sizes="128x128" href="favicon.png?v=2">
+<link rel="apple-touch-icon" href="favicon.png?v=2">
+<style>
+:root{--navy:#12324d;--navy2:#1c4468;--lemon:#f2c230;--sage:#527a4b;--paper:#f4f5f1;--surface:#fff;--ink:#16293a;--muted:#5f7080;--line:#dfe4e1;--track:#e8ece9;--shadow:0 1px 2px rgba(18,50,77,.06),0 8px 24px rgba(18,50,77,.06)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
+.bar{background:#fdf8ed;color:var(--navy);border-bottom:3px solid var(--lemon)}
+.bar-in{max-width:880px;margin:auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.brand img{width:92px;height:auto;display:block;flex:none}
+h1{margin:0;font-size:20px;font-weight:650;letter-spacing:-.01em;line-height:1.2}
+.sub{margin:2px 0 0;font-size:13px;color:var(--muted)}
+.week{font-size:13px;color:var(--navy);background:#fff;border:1px solid #eadfb8;font-weight:600;padding:7px 12px;border-radius:999px;white-space:nowrap}
+main{max-width:880px;margin:auto;padding:24px 20px 48px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin-bottom:20px}
+.hero{display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center;padding:28px}
+.ring{position:relative;width:180px;height:180px;margin:auto}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .bg{stroke:var(--track)}
+.ring .fg{stroke:var(--navy);stroke-linecap:round;transition:stroke-dashoffset .5s ease,stroke .3s}
+.ring.done .fg{stroke:var(--sage)}
+.ring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-c strong{font-size:40px;line-height:1;font-weight:700;letter-spacing:-.02em}
+.ring-c span{font-size:13px;color:var(--muted);margin-top:6px}
+.kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.kpi{padding:14px 16px;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.kpi small{display:block;font-size:13px;color:var(--muted)}
+.kpi strong{display:block;font-size:22px;margin-top:2px;font-weight:650}
+.status{grid-column:1/-1;margin:0;padding:12px 16px;border-radius:10px;background:#fbf3d3;border-left:4px solid var(--lemon);font-size:14px}
+.status.ok{background:#e6f0e3;border-color:var(--sage)}
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:20px 24px 8px}
+h2{margin:0;font-size:17px;font-weight:650}
+.note{margin:0;font-size:13px;color:var(--muted)}
+.days{padding:4px 24px 12px}
+.day{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.day:last-child{border-bottom:0}
+.day.today .name::after{content:"Hoje";margin-left:8px;font-size:12px;font-weight:600;background:var(--lemon);color:#3a2f00;padding:2px 8px;border-radius:999px;vertical-align:1px}
+.name{font-weight:600;font-size:15px}
+.tag{font-weight:500;color:var(--muted);font-size:13px;margin-left:6px}
+.meta{font-size:13px;color:var(--muted)}
+.mini{grid-column:1/-1;height:6px;border-radius:6px;background:var(--track);overflow:hidden}
+.mini i{display:block;height:100%;width:0;background:var(--sage);border-radius:6px;transition:width .3s}
+.day.reserve .mini i{background:var(--lemon)}
+.ctl{display:flex;align-items:center;gap:6px}
+.ctl input{width:64px;height:40px;text-align:center;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink);font:inherit;font-weight:600}
+button{font:inherit;cursor:pointer}
+.ctl button{width:40px;height:40px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);font-size:20px;line-height:1}
+.ctl button:hover{background:#f1f4f2}
+.ctl .add{background:var(--navy);border-color:var(--navy);color:#fff}
+.ctl .add:hover{background:var(--navy2)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.reset{background:none;border:1px solid var(--line);color:var(--muted);padding:9px 14px;border-radius:8px;font-size:14px}
+.reset:hover{color:#9b2c2c;border-color:#d9b3b3}
+.saved{font-size:13px;color:var(--muted);margin:0}
+:focus-visible{outline:3px solid #2f7fc1;outline-offset:2px}
+@media(max-width:640px){
+ .brand img{width:72px}
+ .hero{grid-template-columns:1fr;padding:22px 18px;gap:20px}
+ .week{display:none}
+ .head,.days{padding-left:18px;padding-right:18px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+ <div class="brand"><img src="logo-msp.png" alt="Logo Minha Semana Produtiva"><div><h1>Minha semana produtiva</h1><p class="sub">Meta: 20 horas, 400 tarefas</p></div></div>
+ <div class="week" id="weeklabel"></div>
+</div></header>
+<main>
+ <section class="panel hero" aria-label="Resumo da semana">
+  <div class="ring" id="ring" role="img" aria-label="Progresso semanal">
+   <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bg" cx="60" cy="60" r="52" fill="none" stroke-width="10"/><circle class="fg" id="arc" cx="60" cy="60" r="52" fill="none" stroke-width="10" stroke-dasharray="326.73" stroke-dashoffset="326.73"/></svg>
+   <div class="ring-c"><strong id="percent">0%</strong><span><b id="total">0</b> de 400 tarefas</span></div>
+  </div>
+  <div>
+   <div class="kpis">
+    <div class="kpi"><small>Horas realizadas</small><strong id="hours">0h 00min</strong></div>
+    <div class="kpi"><small>Tempo restante</small><strong id="remaining">20h 00min</strong></div>
+    <div class="kpi"><small>Tarefas restantes</small><strong id="left">400</strong></div>
+    <div class="kpi"><small>Ritmo necessário</small><strong id="pace">67 por dia</strong></div>
+   </div>
+  </div>
+  <p class="status" id="status" role="status"></p>
+ </section>
+ <section class="panel" aria-label="Contagem por dia">
+  <div class="head"><h2>Contagem por dia</h2><p class="note">3 minutos por tarefa. Quinta é o dia de reserva.</p></div>
+  <div class="days" id="days"></div>
+ </section>
+ <div class="foot"><p class="saved">Os registros ficam salvos neste navegador e neste aparelho.</p><button class="reset" id="reset">Zerar semana</button></div>
+</main>
+<script>
+(()=>{
+const names=['Sábado','Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira'];
+const target=400,minutes=3,reserve=5,daily=Math.ceil(target/6),C=326.73;
+const pad=n=>String(n).padStart(2,'0');
+function weekStart(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+1)%7));return d}
+const start=weekStart(),todayIdx=(new Date().getDay()+1)%7;
+const key='minha-semana-produtiva-'+start.getFullYear()+'-'+pad(start.getMonth()+1)+'-'+pad(start.getDate());
+let counts;
+try{counts=JSON.parse(localStorage.getItem(key))||Array(7).fill(0)}catch(e){counts=Array(7).fill(0)}
+if(!Array.isArray(counts)||counts.length!==7)counts=Array(7).fill(0);
+const $=id=>document.getElementById(id);
+const fmt=m=>Math.floor(m/60)+'h '+pad(m%60)+'min';
+const save=()=>{try{localStorage.setItem(key,JSON.stringify(counts))}catch(e){}};
+function render(){
+ const total=counts.reduce((a,b)=>a+b,0),mins=total*minutes,pct=Math.round(total/target*100),left=Math.max(0,target-total),done=total>=target;
+ $('total').textContent=total;$('percent').textContent=pct+'%';
+ $('arc').style.strokeDashoffset=C*(1-Math.min(1,total/target));
+ $('ring').classList.toggle('done',done);$('ring').setAttribute('aria-label','Progresso semanal: '+pct+'%');
+ $('hours').textContent=fmt(mins);$('remaining').textContent=fmt(Math.max(0,1200-mins));$('left').textContent=left;
+ let daysLeft=0;for(let i=todayIdx;i<7;i++)if(i!==reserve)daysLeft++;
+ $('pace').textContent=done?'Meta batida':daysLeft?Math.ceil(left/daysLeft)+' por dia':'Use a reserva';
+ const s=$('status');s.classList.toggle('ok',done);
+ s.textContent=done?'Meta semanal concluída: você cumpriu as 20 horas.':total===0?'Comece pela primeira tarefa. Cada uma conta.':'Faltam '+left+' tarefas para completar a meta da semana.';
+ $('days').innerHTML=names.map((n,i)=>`<div class="day${i===todayIdx?' today':''}${i===reserve?' reserve':''}"><div><div class="name">${n}${i===reserve?'<span class="tag">Reserva</span>':''}</div><div class="meta">${counts[i]} tarefas, ${fmt(counts[i]*minutes)}</div></div><div class="ctl"><button data-minus="${i}" aria-label="Diminuir tarefa de ${n}">−</button><input data-count="${i}" type="number" inputmode="numeric" min="0" max="99999" value="${counts[i]}" aria-label="Tarefas de ${n}"><button class="add" data-plus="${i}" aria-label="Adicionar tarefa em ${n}">+</button></div><div class="mini" aria-hidden="true"><i style="width:${Math.min(100,counts[i]/daily*100)}%"></i></div></div>`).join('');
+ const end=new Date(start.getTime()+6*86400000);
+ $('weeklabel').textContent='Semana de '+pad(start.getDate())+'/'+pad(start.getMonth()+1)+' a '+pad(end.getDate())+'/'+pad(end.getMonth()+1);
+}
+$('days').addEventListener('click',e=>{const p=e.target.closest('[data-plus]'),m=e.target.closest('[data-minus]');if(p){counts[+p.dataset.plus]++;save();render()}if(m){const i=+m.dataset.minus;counts[i]=Math.max(0,counts[i]-1);save();render()}});
+$('days').addEventListener('change',e=>{if(e.target.dataset.count!==undefined){const i=+e.target.dataset.count;counts[i]=Math.max(0,Math.min(99999,Math.floor(Number(e.target.value)||0)));save();render()}});
+$('reset').addEventListener('click',()=>{if(confirm('Deseja zerar todas as tarefas desta semana?')){counts=Array(7).fill(0);save();render()}});
+render();
+})();
+</script>
+</body>
+</html>
